@@ -435,6 +435,11 @@ export default function Home() {
                 </svg>
               </div>
 
+              {/* Filter Popover Overlay */}
+              {showFilterPopover && (
+                <div className="filter-overlay" onClick={() => setShowFilterPopover(false)}></div>
+              )}
+
               {/* Filter Popover Form */}
               {showFilterPopover && (
                 <div className="filter-dropdown-popover">
@@ -514,14 +519,21 @@ export default function Home() {
                     </div>
                   </div>
 
-                  {/* Reset button */}
-                  <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '0.5rem' }}>
+                  {/* Reset & Apply buttons */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.75rem', marginTop: '0.5rem' }}>
                     <button 
                       className="btn-secondary" 
                       style={{ width: 'auto', padding: '0.4rem 1rem' }} 
                       onClick={resetFilters}
                     >
-                      Reset Filters
+                      Reset
+                    </button>
+                    <button 
+                      className="btn-primary" 
+                      style={{ width: 'auto', padding: '0.4rem 1.25rem', background: 'var(--sidebar-bg)' }} 
+                      onClick={() => setShowFilterPopover(false)}
+                    >
+                      Apply
                     </button>
                   </div>
                 </div>
@@ -875,6 +887,12 @@ export default function Home() {
           </div>
         </div>
       )}
+      {/* Mobile Floating Action Button (FAB) */}
+      <button className="mobile-fab" onClick={() => setShowAddLeadModal(true)}>
+        <svg viewBox="0 0 24 24">
+          <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+        </svg>
+      </button>
     </div>
   );
 }
