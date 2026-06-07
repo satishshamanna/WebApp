@@ -182,18 +182,30 @@ function VerticalDualBarChart({ leads }) {
 function HorizontalSingleBarChart({ leads }) {
   // Aggregate pipelines status count
   const stats = useMemo(() => {
-    let won = 0;
-    let pending = 0;
+    const totalLeads = leads.length;
+    let wonCount = 0;
+    let wonRevenue = 0;
+    let lostCount = 0;
+
     leads.forEach(l => {
-      if (l.status === 'Contract Won') won++;
-      else pending++;
+      if (l.status === 'Contract Won') {
+        wonCount++;
+        wonRevenue += l.deal_value || 0;
+      } else if (l.status === 'Contract Lost') {
+        lostCount++;
+      }
     });
-    const total = leads.length;
+
+    const formattedRevenue = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      maximumFractionDigits: 0
+    }).format(wonRevenue);
 
     return [
-      { label: 'Product Sold', value: won, displayLabel: `Product Sold (${won})` },
-      { label: 'Ongoing Product', value: pending, displayLabel: `Ongoing Product (${pending})` },
-      { label: 'Product Launched', value: total, displayLabel: `Product Launched (${total})` }
+      { label: 'Won', value: wonCount, displayLabel: `Contracts Won (${wonCount}) - ${formattedRevenue}` },
+      { label: 'Lost', value: lostCount, displayLabel: `Contracts Lost (${lostCount})` },
+      { label: 'Total', value: totalLeads, displayLabel: `Total Leads (${totalLeads})` }
     ];
   }, [leads]);
 
@@ -206,7 +218,7 @@ function HorizontalSingleBarChart({ leads }) {
   // SVG Dimensions
   const svgWidth = 500;
   const svgHeight = 220;
-  const paddingLeft = 130;
+  const paddingLeft = 190;
   const paddingRight = 40;
   const paddingTop = 20;
   const paddingBottom = 30;
